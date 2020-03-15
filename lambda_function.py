@@ -30,7 +30,7 @@ def lambda_handler(event, context):
             url = f'https://codeforces.com/contests/{x["id"]}'
             
             attachments.append({
-                'color': '#EF9AAF',
+                'color': '#FFBE5C',
                 'fields': [{
                     'title': name,
                     'value': f'{starts} ~ {ends} | {url}',
@@ -57,7 +57,7 @@ def lambda_handler(event, context):
             url = x['url']
             
             attachments.append({
-                'color': '#EF9AAF',
+                'color': '#9d3757',
                 'fields': [{
                     'title': name,
                     'value': f'{starts} ~ {ends} | {url}',
