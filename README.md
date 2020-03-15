@@ -1,3 +1,10 @@
+![screenshot](screenshot.png)
+
+어케해
+* Slack에 Incoming, Outgoing WebHooks 하나씩 설치
+* Slack의 Outgoing에 Lambda API Gateway 트리거를 붙여주고
+* Lambda에서 post request를 Incoming에다가 해주면 됨
+
 가져오는거
 * 코포
 * 앳코더
