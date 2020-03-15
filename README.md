@@ -1,3 +1,8 @@
+가져오는거
+* 코포
+* 앳코더
+* 더 있을까
+
 무식하게 AWS Lambda 앱 하나 만들기
 
 1. Install dependencies
@@ -17,3 +22,7 @@ TODO
 * Atcoder support
 * serverless
 * layer for dependencies
+
+참고
+
+* https://codeforces.com/apiHelp/objects#Contest

@@ -2,6 +2,7 @@ import json
 import requests
 from bs4 import BeautifulSoup
 import datetime
+import time
 import os
 
 KST = datetime.timezone(datetime.timedelta(hours=9))
@@ -36,8 +37,34 @@ def lambda_handler(event, context):
                     'short': False
                 }]
             })
+    # CODEFORCES END
 
-    
+    # ATCODER
+    at_list = get_atcoder_contests()
+    if not at_list['fetch']:
+        attachments.append({
+            'color': '#FF0000',
+            'fields': [{
+                'value': 'error fetching atcoder'
+            }]
+        })
+    else:
+        print(at_list)
+        for x in at_list['contests']:
+            name = x['name']
+            starts = datetime.datetime.fromtimestamp(x['starts']).strftime('%Y-%m-%d %H:%M')
+            ends = datetime.datetime.fromtimestamp(x['ends']).strftime('%Y-%m-%d %H:%M')
+            url = x['url']
+            
+            attachments.append({
+                'color': '#EF9AAF',
+                'fields': [{
+                    'title': name,
+                    'value': f'{starts} ~ {ends} | {url}',
+                    'short': False
+                }]
+            })
+    # ATCODER END
 
     now = datetime.datetime.now(KST)
     nowDatetime = now.strftime('%Y-%m-%d %H:%M:%S')
@@ -80,5 +107,46 @@ def get_codeforces_contests():
     before_contest_list = [x for x in res if x['phase'] == 'BEFORE' and x['type'] == 'CF']
     
     ret['contests'] = before_contest_list
+    
+    return ret
+
+
+def get_atcoder_contests():
+    ATCODER_URL = 'https://atcoder.jp'
+    
+    ret = {}  # return dict
+
+    req = requests.get(ATCODER_URL + '/contests')
+    if req.status_code != 200:
+        ret['fetch'] = False
+    else:
+        ret['fetch'] = True
+
+    html = req.text
+    soup = BeautifulSoup(html, 'html.parser')
+
+    contests = soup.select('#contest-table-upcoming > div > div > table > tbody > tr')
+    # contests = soup.select('#contest-table-recent > div > div > table > tbody > tr')
+
+    ret['contests'] = []
+
+    for x in contests:
+        starts_str = x.select_one('td:nth-child(1) > a').text
+        starts = time.mktime(datetime.datetime.strptime(starts_str, '%Y-%m-%d %H:%M:%S%z').timetuple())
+        name = x.select_one('td:nth-child(2) > a').text
+        url = x.select_one('td:nth-child(2) > a').get('href')
+        duration_str = x.select_one('td:nth-child(3)').text
+        h, m = map(int, duration_str.split(':'))
+        duration = h * 60 * 60 + m * 60
+        ends = starts + duration
+        
+        print(starts, ends, duration)
+        ret['contests'].append({
+            'name': name,
+            'starts': starts,
+            'ends': ends,
+            'duration': duration,
+            'url': ATCODER_URL + url
+        })
     
     return ret
