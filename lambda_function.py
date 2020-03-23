@@ -104,7 +104,7 @@ def get_codeforces_contests():
         ret['fetch'] = True
 
     res = req['result']
-    before_contest_list = [x for x in res if x['phase'] == 'BEFORE' and x['type'] == 'CF']
+    before_contest_list = [x for x in res if x['phase'] == 'BEFORE']
     
     ret['contests'] = before_contest_list
     
