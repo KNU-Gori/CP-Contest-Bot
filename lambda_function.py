@@ -36,11 +36,16 @@ def lambda_handler(event, context):
             url = f'https://codeforces.com/contests/{x["id"]}'
 
             starts_delta = starts - now
-            # if timedelta(0) <= starts_delta <= timedelta(hours=12):
+            attach_text = ''
+            if starts_delta.days != 0:
+                attach_text += f'{starts_delta.days}일 '
+            attach_text += f'{starts_delta.seconds // 3600}시간 후에 시작해요!'
 
             attachments.append({
+                'mrkdwn_in': ['text'],
                 'color': '#FFBE5C',
                 'title': name,
+                'text': attach_text,
                 'fields': [
                     {
                         'title': '시작 일시',
@@ -77,9 +82,17 @@ def lambda_handler(event, context):
             ends = datetime.fromtimestamp(x['ends'])
             ends_s = ends.strftime('%Y-%m-%d %H:%M')
             url = x['url']
-            
+
+            starts_delta = starts - now
+            attach_text = ''
+            if starts_delta.days != 0:
+                attach_text += f'{starts_delta.days}일 '
+            attach_text += f'{starts_delta.seconds // 3600}시간 후에 시작해요!'
+
             attachments.append({
+                'mrkdwn_in': ['text'],
                 'color': '#9d3757',
+                'text': attach_text,
                 'title': name,
                 'fields': [
                     {
