@@ -33,6 +33,7 @@ pip install bs4 requests -t .
 - [ ] 당일 시작하는 콘테스트가 있을 경우 따로 알림
 - [ ] Use serverless
 - [ ] Use Lambda Layer for dependencies
+- [ ] Slack에서 attachment 대신에 blocks 사용하기 
 
 ## 참고한 URL
 - https://codeforces.com/apiHelp/objects#Contest

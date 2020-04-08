@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-import datetime
+from datetime import *
 import time
 
 
@@ -25,7 +25,7 @@ def get_contests():
 
     for x in contests:
         starts_str = x.select_one('td:nth-child(1) > a').text
-        starts = time.mktime(datetime.datetime.strptime(starts_str, '%Y-%m-%d %H:%M:%S%z').timetuple())
+        starts = time.mktime(datetime.strptime(starts_str, '%Y-%m-%d %H:%M:%S%z').timetuple())
         name = x.select_one('td:nth-child(2) > a').text
         url = x.select_one('td:nth-child(2) > a').get('href')
         duration_str = x.select_one('td:nth-child(3)').text

@@ -1,18 +1,20 @@
 import json
-import datetime
+from datetime import *
 import time
 import requests
 import os
 import codeforces, atcoder
 
-KST = datetime.timezone(datetime.timedelta(hours=9))
+KST = timezone(timedelta(hours=9))
 
 
 def lambda_handler(event, context):
     WEBHOOK_URL = os.environ['INCOMING_WEBHOOK_URL']
 
     attachments = []  # for payloads. final result goes here
-    today_cnt = 0  # num of contests which start today
+
+    now = datetime.now(KST)
+    now_s = now.strftime('%Y-%m-%d %H:%M:%S')
     
     # CODEFORCES
     cf_list = codeforces.get_contests()
@@ -27,17 +29,33 @@ def lambda_handler(event, context):
         print(cf_list)
         for x in cf_list['contests']:
             name = x['name']
-            starts = datetime.datetime.fromtimestamp(x['startTimeSeconds'], KST).strftime('%Y-%m-%d %H:%M')
-            ends = datetime.datetime.fromtimestamp(x['startTimeSeconds'] + x['durationSeconds'], KST).strftime('%Y-%m-%d %H:%M')
+            starts = datetime.fromtimestamp(x['startTimeSeconds'], KST)
+            starts_s = starts.strftime('%Y-%m-%d %H:%M')
+            ends = datetime.fromtimestamp(x['startTimeSeconds'] + x['durationSeconds'], KST)
+            ends_s = ends.strftime('%Y-%m-%d %H:%M')
             url = f'https://codeforces.com/contests/{x["id"]}'
-            
+
+            starts_delta = starts - now
+            # if timedelta(0) <= starts_delta <= timedelta(hours=12):
+
             attachments.append({
                 'color': '#FFBE5C',
-                'fields': [{
-                    'title': name,
-                    'value': f'{starts} ~ {ends} | {url}',
-                    'short': False
-                }]
+                'title': name,
+                'fields': [
+                    {
+                        'title': '시작 일시',
+                        'value': starts_s,
+                        'short': True
+                    }, {
+                        'title': '종료 일시',
+                        'value': ends_s,
+                        'short': True
+                    }, {
+                        'title': '대회 URL',
+                        'value': url,
+                        'short': False
+                    }
+                ]
             })
     # CODEFORCES END
 
@@ -54,24 +72,36 @@ def lambda_handler(event, context):
         print(at_list)
         for x in at_list['contests']:
             name = x['name']
-            starts = datetime.datetime.fromtimestamp(x['starts']).strftime('%Y-%m-%d %H:%M')
-            ends = datetime.datetime.fromtimestamp(x['ends']).strftime('%Y-%m-%d %H:%M')
+            starts = datetime.fromtimestamp(x['starts'])
+            starts_s = starts.strftime('%Y-%m-%d %H:%M')
+            ends = datetime.fromtimestamp(x['ends'])
+            ends_s = ends.strftime('%Y-%m-%d %H:%M')
             url = x['url']
             
             attachments.append({
                 'color': '#9d3757',
-                'fields': [{
-                    'title': name,
-                    'value': f'{starts} ~ {ends} | {url}',
-                    'short': False
-                }]
+                'title': name,
+                'fields': [
+                    {
+                        'title': '시작 일시',
+                        'value': starts_s,
+                        'short': True
+                    }, {
+                        'title': '종료 일시',
+                        'value': ends_s,
+                        'short': True
+                    }, {
+                        'title': '대회 URL',
+                        'value': url,
+                        'short': False
+                    }
+                ]
             })
     # ATCODER END
 
-    now = datetime.datetime.now(KST)
-    nowDatetime = now.strftime('%Y-%m-%d %H:%M:%S')
+    # MAIN
     payloads = {
-        'text': f'{nowDatetime} 기준 콘테스트 목록',
+        'text': f'{now_s} 기준 콘테스트 목록',
         'attachments': attachments
     }
 
@@ -91,3 +121,4 @@ def lambda_handler(event, context):
             'statusCode': 200,
             'body': json.dumps('succeed')
         }
+    # MAIN END
