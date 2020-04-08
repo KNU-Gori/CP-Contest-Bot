@@ -1,6 +1,6 @@
 # CP-Contest-Bot  
 온라인 알고리즘 콘테스트 일정을 Slack에 알려주는 WebHook  
-![screenshot](screenshot.png)  
+![screenshot](screenshot_new.png)  
 
 ## 가져오는 것들  
 - Codeforces  
@@ -30,7 +30,7 @@ pip install bs4 requests -t .
 
 ## TODO
 - [x] Atcoder support
-- [ ] 당일 시작하는 콘테스트가 있을 경우 따로 알림
+- [x] ~~당일 시작하는 콘테스트가 있을 경우 따로 알림~~ 대회 얼마나 남았는지를 따로 출력
 - [ ] Use serverless
 - [ ] Use Lambda Layer for dependencies
 - [ ] Slack에서 attachment 대신에 blocks 사용하기 
