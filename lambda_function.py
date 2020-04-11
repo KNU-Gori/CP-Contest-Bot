@@ -15,7 +15,7 @@ def lambda_handler(event, context):
 
     now = datetime.now(KST)
     now_s = now.strftime('%Y-%m-%d %H:%M:%S')
-    
+
     # CODEFORCES
     cf_list = codeforces.get_contests()
     if not cf_list['fetch']:
@@ -77,9 +77,9 @@ def lambda_handler(event, context):
         print(at_list)
         for x in at_list['contests']:
             name = x['name']
-            starts = datetime.fromtimestamp(x['starts'])
+            starts = datetime.fromtimestamp(x['starts'], KST)
             starts_s = starts.strftime('%Y-%m-%d %H:%M')
-            ends = datetime.fromtimestamp(x['ends'])
+            ends = datetime.fromtimestamp(x['ends'], KST)
             ends_s = ends.strftime('%Y-%m-%d %H:%M')
             url = x['url']
 
