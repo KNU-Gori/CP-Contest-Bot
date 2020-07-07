@@ -1,4 +1,6 @@
 # CP-Contest-Bot  
+> **이 Repository는 더 이상 관리되지 않습니다. 새 기능 개발은 https://github.com/Dogdriip/CP-Contest-Bot 에서 이루어집니다.**
+
 온라인 알고리즘 콘테스트 일정을 Slack에 알려주는 WebHook  
 ![screenshot](screenshot_new.png)  
 
